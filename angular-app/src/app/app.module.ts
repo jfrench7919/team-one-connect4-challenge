@@ -12,10 +12,14 @@ import { NavBarModule } from './components/nav-bar/nav-bar.module';
 import { ReadMeModule } from './components/read-me/read-me.module';
 import { TerminalCommandModule } from './components/read-me/terminal-command/terminal-command.module';
 import { MyStoreModule } from './components/store/store.module';
+import { SetupPageComponent } from './components/setup-page/setup-page.component';
+import { GamePageComponent } from './components/game-page/game-page.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SetupPageComponent,
+    GamePageComponent
   ],
   imports: [
     BrowserModule,
