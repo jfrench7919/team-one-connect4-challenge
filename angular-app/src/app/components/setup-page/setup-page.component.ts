@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { Player } from '../playerClass';
 
 @Component({
   selector: 'app-setup-page',
@@ -30,6 +31,16 @@ export class SetupPageComponent implements OnInit {
 
   Start(): void {
     this.onStart.emit("start game");
+  }
+
+  getPlayerInfo(id: number): string {
+
+    if(id == 1)
+    {
+      return this.playerOneNameFormControl.value;
+    }
+
+    return this.playerTwoNameFormControl.value;
   }
 
 }

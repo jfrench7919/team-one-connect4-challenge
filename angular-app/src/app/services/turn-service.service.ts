@@ -9,6 +9,7 @@ export class TurnServiceService {
 
   turnTracker: number = 0;
 
+
   constructor() { }
 
   ngOnInit(): void {
@@ -17,7 +18,7 @@ export class TurnServiceService {
 
   }
 
-  UpdateTurn(): number {
+  UpdateTurn(): (1 | 2) {
     if(this.turnTracker === 1)
     {
       return this.turnTracker = 2;
@@ -29,6 +30,10 @@ export class TurnServiceService {
     else {
       return this.turnTracker = 1;
     }
+  }
+
+  CurrentPlayer(): number {
+    return this.turnTracker;
   }
 
 }
