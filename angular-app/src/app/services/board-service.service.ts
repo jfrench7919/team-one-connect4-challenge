@@ -97,7 +97,7 @@ export class BoardServiceService {
     return returnMat;
   }
 
-  checkFDiagWinCondition(): (1|2|0){
+  private checkFDiagWinCondition(): (1|2|0){
     for (let column = 0; column < 7; column++){ // 0-6
       for (let ele = 0; ele < 6; ele ++){ // 0-5
         var cond = this.getfdiag(column,ele)
@@ -110,7 +110,7 @@ export class BoardServiceService {
     return 0;
   }
 
-  getfdiag(column: number,ele: number): (1|2|0)[]{
+  private getfdiag(column: number,ele: number): (1|2|0)[]{
     var returnArray = [this.MainBoard[column][ele]];
     while (returnArray.length != 4){
       column++;ele++;
@@ -122,7 +122,7 @@ export class BoardServiceService {
     return returnArray;
   }
 
-  checkBDiagWinCondition(): (1|2|0){
+  private checkBDiagWinCondition(): (1|2|0){
     for (let column = 0; column < 7; column++){ // 0-6
       for (let ele = 0; ele < 6; ele ++){ // 0-5
         var cond = this.getbdiag(column,ele)
@@ -135,7 +135,7 @@ export class BoardServiceService {
     return 0;
   }
 
-  getbdiag(column: number,ele: number): (1|2|0)[]{
+  private getbdiag(column: number,ele: number): (1|2|0)[]{
     var returnArray = [this.MainBoard[column][ele]];
     while (returnArray.length != 4){
       column++;ele--;
@@ -147,7 +147,7 @@ export class BoardServiceService {
     return returnArray;
   }
 
-  allElesEqual(array: number[]): boolean{
+  private allElesEqual(array: number[]): boolean{
     return array.every(element => element == array[0]);
   }
 
