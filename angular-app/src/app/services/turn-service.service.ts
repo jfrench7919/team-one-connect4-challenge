@@ -7,9 +7,6 @@ import { Player } from '../components/playerClass';
 })
 export class TurnServiceService {
 
-  @Input() playerOneName: Player;
-  @Input() playerTwoName: Player;
-
   turnTracker: number = 0;
 
   constructor() { }
@@ -19,4 +16,19 @@ export class TurnServiceService {
     //Add 'implements OnInit' to the class.
 
   }
+
+  UpdateTurn(): number {
+    if(this.turnTracker === 1)
+    {
+      return this.turnTracker = 2;
+    }
+    else if(this.turnTracker === 2)
+    {
+      return this.turnTracker = 1;
+    }
+    else {
+      return this.turnTracker = 1;
+    }
+  }
+
 }
