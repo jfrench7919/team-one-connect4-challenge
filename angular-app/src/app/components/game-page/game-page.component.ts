@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardServiceService } from 'src/app/services/board-service.service';
+import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-game-page',
@@ -8,12 +9,14 @@ import { BoardServiceService } from 'src/app/services/board-service.service';
 })
 export class GamePageComponent implements OnInit {
 
+  testPlayer = "Player 1"
+
   constructor(
     private boardService : BoardServiceService
   ) { }
 
   ngOnInit(): void {
-
+  
   }
 
   onColumnClick(colIndex: number){
