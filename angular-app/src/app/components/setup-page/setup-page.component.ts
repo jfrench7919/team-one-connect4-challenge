@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angul
 })
 export class SetupPageComponent implements OnInit {
   form: FormGroup;
+  @Output() onStart = new EventEmitter<string>();
 
 
   playerOneNameFormControl: FormControl;
@@ -28,7 +29,7 @@ export class SetupPageComponent implements OnInit {
   }
 
   Start(): void {
-
+    this.onStart.emit("start game");
   }
 
 }
