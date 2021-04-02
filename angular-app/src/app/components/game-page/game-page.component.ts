@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BoardServiceService } from 'src/app/services/board-service.service';
 
 @Component({
   selector: 'app-game-page',
@@ -7,9 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GamePageComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private boardService : BoardServiceService
+  ) { }
 
   ngOnInit(): void {
+
+  }
+
+  onColumnClick(colIndex: number){
+    var player: (1|2) = 1;
+    this.boardService.placeToken(player, colIndex);
+    this.boardService.checkIfWinCondition();
   }
 
 }
