@@ -1,9 +1,9 @@
-<!--<app-nav-bar></app-nav-bar>-->
+<!--<app-nav-bar></app-nav-bar>
+<router-outlet class="p-2"></router-outlet>-->
 
 <div *ngIf="settingUp">
     <app-setup-page (onStart)="startGame()"></app-setup-page>
 </div>
 
-<router-outlet class="p-2"></router-outlet>
 
-<app-game-page></app-game-page>
+<app-game-page *ngIf="!settingUp"></app-game-page>
