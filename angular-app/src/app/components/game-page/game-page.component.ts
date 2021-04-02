@@ -12,11 +12,11 @@ export class GamePageComponent implements OnInit {
   testPlayer = "Player 1"
 
   constructor(
-    private boardService : BoardServiceService
+    public boardService : BoardServiceService
   ) { }
 
   ngOnInit(): void {
-  
+    
   }
 
   onColumnClick(colIndex: number){
