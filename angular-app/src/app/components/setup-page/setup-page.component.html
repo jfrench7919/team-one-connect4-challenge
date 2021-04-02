@@ -1,1 +1,31 @@
-<p>setup-page works!</p>
+<form [formGroup]="form">
+  <div>
+    <h5 class="title">Welcome to our amazing and clearly best version of Connect 4. Prepare to have your minds blown.
+      Enter your information below and click 'Start' to begin the experience of a lifetime.</h5>
+  </div>
+  <div>
+    <div class="row">
+      <div class="col-6">
+        <label for="playerOneName">
+          Player 1 Name:
+        </label>
+        <input [formControl]="playerOneNameFormControl" type="text" class="form-control form control-m"
+          id="playerOneName" />
+      </div>
+      <div class="col-6">
+        <label for="playerOneName">
+          Player 2 Name:
+        </label>
+        <input [formControl]="playerTwoNameFormControl" type="text" class="form-control form control-m"
+          id="playerTwoName" />
+      </div>
+    </div>
+
+
+    <div class="row">
+      <button class="btn btn-primary" (click)="Start()">
+        Start
+      </button>
+    </div>
+  </div>
+</form>

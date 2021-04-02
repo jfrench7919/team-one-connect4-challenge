@@ -14,6 +14,7 @@ import { TerminalCommandModule } from './components/read-me/terminal-command/ter
 import { MyStoreModule } from './components/store/store.module';
 import { SetupPageComponent } from './components/setup-page/setup-page.component';
 import { GamePageComponent } from './components/game-page/game-page.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,8 @@ import { GamePageComponent } from './components/game-page/game-page.component';
     MyStoreModule,
     TerminalCommandModule,
     ReadMeModule,
+    FormsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
