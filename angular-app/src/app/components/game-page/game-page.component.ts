@@ -11,10 +11,11 @@ import { stringify } from '@angular/compiler/src/util';
 export class GamePageComponent implements OnInit {
 
   testPlayer = "Player 1"
+  win = false;
 
   constructor(
-    private boardService : BoardServiceService,
-    private turnService : TurnServiceService
+    public boardService : BoardServiceService,
+    public turnService : TurnServiceService
   ) { }
 
   ngOnInit(): void {
@@ -28,7 +29,11 @@ export class GamePageComponent implements OnInit {
     if(player === this.turnService.CurrentPlayer())
     {
       this.boardService.placeToken(player, colIndex);
-      this.boardService.checkIfWinCondition();
+    }
+
+    if(this.boardService.checkIfWinCondition()){
+      this.win = true;
+
     }
   }
 
