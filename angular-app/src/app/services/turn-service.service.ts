@@ -1,21 +1,28 @@
 import { Input } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Player } from '../components/playerClass';
+
 // store player info and who's turn is it
 @Injectable({
   providedIn: 'root'
 })
 export class TurnServiceService {
 
-  turnTracker: number = 0;
+  Player1Name = ''
+  Player2Name = ''
 
+  turnTracker: number = 0;
 
   constructor() { }
 
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+  // Starts the game with a random first player;
+  initializeGame() : (1|2) {
+    return this.turnTracker = Math.random() > .5 ? 2 : 1;
+  }
 
+  getCurrentPlayerName(): string {
+    if (this.turnTracker == 1) return this.Player1Name;
+    return this.Player2Name;
   }
 
   UpdateTurn(): (1 | 2) {

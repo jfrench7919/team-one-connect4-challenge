@@ -6,4 +6,4 @@
 </div>
 
 
-<app-game-page *ngIf="!settingUp"></app-game-page>
+<app-game-page *ngIf="!settingUp" (reset)="onReset()"></app-game-page>

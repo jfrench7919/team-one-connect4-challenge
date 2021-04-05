@@ -1,7 +1,6 @@
 import { TurnServiceService } from './../../services/turn-service.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BoardServiceService } from 'src/app/services/board-service.service';
-import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-game-page',
@@ -10,7 +9,11 @@ import { stringify } from '@angular/compiler/src/util';
 })
 export class GamePageComponent implements OnInit {
 
-  testPlayer = "Player 1"
+  @Output() reset = new EventEmitter();
+
+  currentPlayer: (1|2) = 1;
+  currentPlayerName = '';
+
   win = false;
 
   constructor(
@@ -19,22 +22,27 @@ export class GamePageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
+    this.boardService.initializeBoard();
+    this.currentPlayer = this.turnService.initializeGame();
+    this.currentPlayerName = this.turnService.getCurrentPlayerName();
   }
 
   onColumnClick(colIndex: number){
+    if(this.win){return}
 
-
-    var player: (1|2) = this.turnService.UpdateTurn();
-    if(player === this.turnService.CurrentPlayer())
-    {
-      this.boardService.placeToken(player, colIndex);
-    }
+    this.boardService.placeToken(this.currentPlayer, colIndex);
 
     if(this.boardService.checkIfWinCondition()){
       this.win = true;
-
+      return
     }
+
+    this.currentPlayer = this.turnService.UpdateTurn()
+    this.currentPlayerName = this.turnService.getCurrentPlayerName()
+  }
+
+  resetGame(): void {
+    this.reset.emit();
   }
 
 }

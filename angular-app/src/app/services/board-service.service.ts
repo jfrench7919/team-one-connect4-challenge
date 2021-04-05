@@ -1,22 +1,29 @@
 import { Injectable } from '@angular/core';
 
+const emptyBoard = [
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+];
+
 @Injectable({
   providedIn: 'root'
 })
 export class BoardServiceService {
 
-  constructor() { }
+  MainBoard: (1|2|0)[][];
 
-  MainBoard: (1|2|0)[][] = 
-    [
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-      [0,0,0,0,0,0],
-    ];
+  constructor() { 
+    this.MainBoard = JSON.parse(JSON.stringify(emptyBoard));
+  }
+
+  initializeBoard(){
+    this.MainBoard = JSON.parse(JSON.stringify(emptyBoard));
+  }
 
   placeToken(player:(1|2), column: number): void{
     for (let i = 0; i < 5; i++)
@@ -30,13 +37,12 @@ export class BoardServiceService {
     throw new Error("column is full");
   }
 
-  checkIfWinCondition(): (1|2|0){
+  checkIfWinCondition(consecutiveTokenVicotryCondition = 4): (1|2|0){
     let victor: (1|2|0) = 0;
-    victor = this.checkVertWinCondition(this.MainBoard, 4); if (victor) console.log("VERT")
-    if (victor == 0) { victor = this.checkHorizWinCondition(this.MainBoard, 4); if (victor) console.log("HORIZ")}
-    if (victor == 0) { victor = this.checkFDiagWinCondition(); if (victor) console.log("FDIAG")}
-    if (victor == 0) { victor = this.checkBDiagWinCondition(); if (victor) console.log("BDIAG")}
-    console.log('======================================')
+    victor = this.checkVertWinCondition(this.MainBoard, consecutiveTokenVicotryCondition); 
+    if (victor == 0) { victor = this.checkHorizWinCondition(this.MainBoard, consecutiveTokenVicotryCondition); }
+    if (victor == 0) { victor = this.checkFDiagWinCondition(this.MainBoard, consecutiveTokenVicotryCondition); }
+    if (victor == 0) { victor = this.checkBDiagWinCondition(this.MainBoard, consecutiveTokenVicotryCondition); }
 
     return victor;
   }
@@ -48,7 +54,7 @@ export class BoardServiceService {
   private checkVertWinCondition(matrix: (1|2|0)[][], consecToWin: number): (1|2|0){
     if (consecToWin > matrix[0].length) throw new Error("impossible win condition")
 
-    let highestRowWinCanStart = matrix[0].length - consecToWin - 1;
+    let highestRowWinCanStart = matrix[0].length - (consecToWin - 1);
 
     for (let column = 0; column < matrix.length; column++){   // for every column
       for (let ele = 0; ele < highestRowWinCanStart; ele ++){ // for every element that can be a possible win condition starting point
@@ -99,12 +105,20 @@ export class BoardServiceService {
     return returnMat;
   }
 
-  private checkFDiagWinCondition(): (1|2|0){
-    for (let column = 0; column < 7; column++){ // 0-6
-      for (let ele = 0; ele < 6; ele ++){ // 0-5
-        var cond = this.getfdiag(column,ele)
-        if (cond && cond.length == 4){
-          if (this.allElesEqual(cond))
+  /** Check every possible diagonal to see if a consecutive set of
+   *  equal elements is long enough to meet the victory conditions.
+   *  This checks allong a "forward slash" diagonal
+   */
+  private checkFDiagWinCondition(matrix: (0|1|2)[][], consecToWin: number): (1|2|0){
+    if (consecToWin > matrix.length || consecToWin > matrix[0].length) throw new Error("impossible win condition");
+    let maxColStartingPoint = matrix.length - (consecToWin - 1)
+    let maxRowStartingPoint = matrix[0].length - (consecToWin - 1)
+
+    for (let column = 0; column < maxColStartingPoint; column++){ 
+      for (let ele = 0; ele < maxRowStartingPoint; ele ++){ 
+        var cond = this.getfdiag(column,ele,this.MainBoard)
+        if (cond && cond.length >= consecToWin){
+          if (this.allElesEqual(cond.slice(0,consecToWin)))
           return cond[0];
         }
       }
@@ -112,24 +126,37 @@ export class BoardServiceService {
     return 0;
   }
 
-  private getfdiag(column: number,ele: number): (1|2|0)[]{
-    var returnArray = [this.MainBoard[column][ele]];
-    while (returnArray.length != 4){
-      column++;ele++;
-      if(column > 6 || ele > 5){
-        return returnArray
-      }
-      returnArray.push(this.MainBoard[column][ele])
+  /** returns diagonal elements of a matrix as a single dimensional array, starting from a given element,
+   *  until the bounds of the matrix is hit.
+   *  By default, walk in a "forwardslash" direction, beginning from bottom-left,
+   *  to walk in a "backslash" direction, beginning from top-left, input rowStep as -1
+   */
+  private getfdiag<T>(column: number, ele: number, matrix: T[][], colStep = 1, rowStep = 1): T[]{
+    var returnArray = [matrix[column][ele]];
+    while (true){
+      column = column + colStep;
+      ele = ele + rowStep;
+      if(
+        column >= matrix.length ||
+        column < 0 ||
+        ele >= matrix[0].length ||
+        ele < 0
+      ) {break}
+      returnArray.push(matrix[column][ele])
     }
     return returnArray;
   }
 
-  private checkBDiagWinCondition(): (1|2|0){
-    for (let column = 0; column < 7; column++){ // 0-6
-      for (let ele = 0; ele < 6; ele ++){ // 0-5
-        var cond = this.getbdiag(column,ele)
-        if (cond && cond.length == 4){
-          if (this.allElesEqual(cond))
+  private checkBDiagWinCondition(matrix: (0|1|2)[][], consecToWin: number): (1|2|0){
+    if (consecToWin > matrix.length || consecToWin > matrix[0].length) throw new Error("impossible win condition");
+    let maxColStartingPoint = matrix.length - (consecToWin - 1)
+    let minRowStartingPoint = matrix[0].length - 1
+
+    for (let column = 0; column < maxColStartingPoint; column++){
+      for (let ele = minRowStartingPoint; ele < matrix[0].length; ele ++){
+        var cond = this.getbdiag<(1|2|0)>(column,ele,matrix)
+        if (cond && cond.length >= consecToWin){
+          if (this.allElesEqual(cond.slice(0,consecToWin)))
           return cond[0];
         }
       }
@@ -137,16 +164,8 @@ export class BoardServiceService {
     return 0;
   }
 
-  private getbdiag(column: number,ele: number): (1|2|0)[]{
-    var returnArray = [this.MainBoard[column][ele]];
-    while (returnArray.length != 4){
-      column++;ele--;
-      if(column > 6 || ele < 0){
-        return returnArray
-      }
-      returnArray.push(this.MainBoard[column][ele])
-    }
-    return returnArray;
+  private getbdiag<T>(column: number,ele: number, matrix: T[][]): T[]{
+    return this.getfdiag(column, ele, matrix, undefined, -1)
   }
 
   private allElesEqual(array: number[]): boolean{

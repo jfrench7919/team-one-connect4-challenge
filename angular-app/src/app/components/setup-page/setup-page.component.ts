@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, FormsModule, Validators } from '@angular/forms';
+import { TurnServiceService } from 'src/app/services/turn-service.service';
 import { Player } from '../playerClass';
 
 @Component({
@@ -15,32 +16,29 @@ export class SetupPageComponent implements OnInit {
   playerOneNameFormControl: FormControl;
   playerTwoNameFormControl: FormControl;
 
-  constructor() {
-    this.playerOneNameFormControl = new FormControl();
-    this.playerTwoNameFormControl = new FormControl();
+  constructor(
+    public turnService: TurnServiceService
+  ) {
+    this.playerOneNameFormControl = new FormControl( turnService.Player1Name ? turnService.Player1Name : 'Player 1', Validators.required);
+    this.playerTwoNameFormControl = new FormControl( turnService.Player2Name ? turnService.Player2Name : 'Player 2', Validators.required);
 
     this.form = new FormGroup ({
       playerOneNameFormControl: this.playerOneNameFormControl,
       playerTwoNameFormControl: this.playerTwoNameFormControl
     })
-   }
+  }
 
   ngOnInit(): void {
 
   }
 
   Start(): void {
+    this.form.updateValueAndValidity();
+    if (this.form.invalid) {window.alert("Please enter a name for each player"); return}
+
+    this.turnService.Player1Name = this.playerOneNameFormControl.value;
+    this.turnService.Player2Name = this.playerTwoNameFormControl.value;
     this.onStart.emit("start game");
-  }
-
-  getPlayerInfo(id: number): string {
-
-    if(id == 1)
-    {
-      return this.playerOneNameFormControl.value;
-    }
-
-    return this.playerTwoNameFormControl.value;
   }
 
 }

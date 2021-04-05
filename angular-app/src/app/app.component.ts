@@ -6,11 +6,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app works!';
+
+  // Indicates that game is in setup mode.
   settingUp = true;
 
   startGame(){
     this.settingUp = false;
+  }
+
+  onReset(){
+    this.settingUp = true;
   }
 
 }
